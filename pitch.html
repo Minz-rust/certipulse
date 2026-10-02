@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CertiPulse Pitch Deck</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .slide {
+            display: none;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body class="bg-[#0b0f19] text-slate-100 min-h-screen flex flex-col justify-between p-8 md:p-14 select-none">
+
+    <!-- Top Bar -->
+    <header class="flex justify-between items-center border-b border-slate-800 pb-4">
+        <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></div>
+            <span class="font-bold text-lg tracking-wider text-emerald-400">CERTIPULSE</span>
+            <span
+                class="text-xs text-slate-500 uppercase font-mono tracking-widest pl-2 border-l border-slate-700">Solana
+                Devnet Edition</span>
+        </div>
+        <div class="font-mono text-sm text-slate-400 font-bold" id="slideNumberTop">01 / 08</div>
+    </header>
+
+    <!-- PRESENTATION CONTAINER -->
+    <main class="flex-1 flex flex-col justify-center my-auto py-6">
+
+        <!-- SLIDE 1: Title -->
+        <section class="slide active flex-1 flex-col justify-center max-w-4xl mx-auto text-center space-y-6">
+            <div
+                class="inline-block mx-auto px-4 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-xs font-mono tracking-wider">
+                COLOSSEUM HACKATHON 2026
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-white">
+                Decentralized Trust for <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Global
+                    Credentials</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
+                Tamper-proof academic and professional certification registry anchored on Solana high-performance
+                ledger.
+            </p>
+            <div class="pt-6 font-mono text-xs text-slate-500">
+                Program ID: <span class="text-emerald-400">C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: The Core Problem -->
+        <section class="slide flex-1 flex-col justify-center max-w-5xl mx-auto space-y-8 w-full">
+            <div>
+                <span class="text-xs font-mono text-rose-400 tracking-widest uppercase">The Industry Problem</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-2">The Credential Forgery Epidemic</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
+                    <div class="text-rose-400 text-3xl font-bold mb-2">90%</div>
+                    <h3 class="font-bold text-white text-base mb-1">Easy to Counterfeit</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">PDF diplomas and completion certificates are
+                        easily modified in image editors within minutes by unqualified applicants.</p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
+                    <div class="text-amber-400 text-3xl font-bold mb-2">Weeks</div>
+                    <h3 class="font-bold text-white text-base mb-1">Slow Verification</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">HR departments and licensing bodies waste weeks
+                        contacting universities via legacy emails and phone calls.</p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl">
+                    <div class="text-cyan-400 text-3xl font-bold mb-2">$0</div>
+                    <h3 class="font-bold text-white text-base mb-1">Fragile Centralization</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">Centralized database servers suffer from single
+                        points of failure, administrative tampering, and system outages.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Why Web2 Fails -->
+        <section class="slide flex-1 flex-col justify-center max-w-5xl mx-auto space-y-8 w-full">
+            <div>
+                <span class="text-xs font-mono text-rose-400 tracking-widest uppercase">System Breakdown</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-2">Why Legacy Web2 Solutions Fail</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-slate-900/80 border border-rose-950/60 p-6 rounded-2xl space-y-3">
+                    <h3 class="text-rose-400 font-bold text-lg">Centralized Cloud Silos</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">Traditional LMS and database systems lock
+                        credentials behind paywalls, custom APIs, or private logins, making universal background checks
+                        impossible for global hiring teams.</p>
+                </div>
+                <div class="bg-slate-900/80 border border-rose-950/60 p-6 rounded-2xl space-y-3">
+                    <h3 class="text-rose-400 font-bold text-lg">Loss of Proof over Time</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed">When an online school or private training academy
+                        goes bankrupt or changes domain servers, former students completely lose their credential
+                        validity proofs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: The CertiPulse Solution -->
+        <section class="slide flex-1 flex-col justify-center max-w-5xl mx-auto space-y-8 w-full">
+            <div>
+                <span class="text-xs font-mono text-emerald-400 tracking-widest uppercase">The Solana
+                    Architecture</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-2">Tamper-Proof Cryptographic Anchors</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div class="space-y-4">
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                            1</div>
+                        <div>
+                            <h4 class="font-bold text-white">SHA-256 Document Fingerprint</h4>
+                            <p class="text-xs text-slate-400 mt-1">Institutions hash recipient credentials. Even a
+                                single changed comma results in a completely different fingerprint.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                            2</div>
+                        <div>
+                            <h4 class="font-bold text-white">Program Derived Address (PDA)</h4>
+                            <p class="text-xs text-slate-400 mt-1">Proof records are anchored permanently into Solana
+                                ledger accounts, verifiable without middleman databases.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-4">
+                        <div
+                            class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-sm">
+                            3</div>
+                        <div>
+                            <h4 class="font-bold text-white">Zero-Wallet Verification</h4>
+                            <p class="text-xs text-slate-400 mt-1">Employers simply paste the hash or scan a QR code to
+                                verify authenticity in under 500 milliseconds.</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="bg-slate-900 border border-slate-800 p-6 rounded-2xl font-mono text-xs text-slate-300 space-y-3">
+                    <div class="text-emerald-400">// Smart Contract Deployment</div>
+                    <div>Network: <span class="text-white">Solana Devnet</span></div>
+                    <div>Anchor Program: <span class="text-cyan-300">Initialized & Live</span></div>
+                    <div>Verification Speed: <span class="text-emerald-400">&lt; 400 ms</span></div>
+                    <div>Transaction Cost: <span class="text-emerald-400">&lt; $0.00025</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: How It Works Step-by-Step -->
+        <section class="slide flex-1 flex-col justify-center max-w-5xl mx-auto space-y-8 w-full">
+            <div>
+                <span class="text-xs font-mono text-emerald-400 tracking-widest uppercase">Workflow Engine</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-2">End-to-End Verification Pipeline</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl space-y-2">
+                    <span class="text-emerald-400 font-mono text-xs font-bold">STEP 01</span>
+                    <h3 class="font-bold text-white">Issue & Anchor</h3>
+                    <p class="text-xs text-slate-400">Academy signs the payload: Student Name + Course + Serial ID. The
+                        resulting SHA-256 fingerprint is submitted to the Anchor program.</p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl space-y-2">
+                    <span class="text-cyan-400 font-mono text-xs font-bold">STEP 02</span>
+                    <h3 class="font-bold text-white">Solana PDA State</h3>
+                    <p class="text-xs text-slate-400">The Solana runtime provisions a Program Derived Address that maps
+                        the certificate fingerprint to the issuer's public key.</p>
+                </div>
+                <div class="bg-slate-900/60 border border-slate-800 p-6 rounded-2xl space-y-2">
+                    <span class="text-purple-400 font-mono text-xs font-bold">STEP 03</span>
+                    <h3 class="font-bold text-white">Instant Query</h3>
+                    <p class="text-xs text-slate-400">Any recruiter or company queries the state. Authentic records
+                        match instantly; modified inputs result in immediate counterfeit alerts.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Why Solana -->
+        <section class="slide flex-1 flex-col justify-center max-w-5xl mx-auto space-y-8 w-full">
+            <div>
+                <span class="text-xs font-mono text-cyan-400 tracking-widest uppercase">Performance Advantage</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-2">Why Solana is the Only Choice</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                    <div class="text-emerald-400 font-bold text-xl">Sub-Second Finality (~400 ms)</div>
+                    <p class="text-xs text-slate-300">Background screening systems require real-time UX. Solana allows
+                        automated hiring platforms to verify thousands of candidates without lagging queues.</p>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-3">
+                    <div class="text-cyan-400 font-bold text-xl">Negligible Gas Costs ($0.00025)</div>
+                    <p class="text-xs text-slate-300">Ethereum gas fees make issuing high-volume educational badges
+                        economically impractical. Solana enables minting 100,000 certificates for under $25.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: Market & Roadmap -->
+        <section class="slide flex-1 flex-col justify-center max-w-5xl mx-auto space-y-8 w-full">
+            <div>
+                <span class="text-xs font-mono text-purple-400 tracking-widest uppercase">Target Market & Vision</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-2">Scalable Infrastructure for EdTech & Web3</h2>
+            </div>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="border border-slate-800 bg-slate-900/40 p-6 rounded-2xl">
+                    <h4 class="font-bold text-emerald-400 mb-2">Phase 1: Bootcamps</h4>
+                    <p class="text-xs text-slate-400">Direct integration with coding academies, AI programs, and online
+                        certifications via standalone issuer dashboards.</p>
+                </div>
+                <div class="border border-slate-800 bg-slate-900/40 p-6 rounded-2xl">
+                    <h4 class="font-bold text-cyan-400 mb-2">Phase 2: B2B API</h4>
+                    <p class="text-xs text-slate-400">Automated Webhooks & SDKs for global LMS platforms (Coursera,
+                        Udemy) to auto-mint verification proofs upon completion.</p>
+                </div>
+                <div class="border border-slate-800 bg-slate-900/40 p-6 rounded-2xl">
+                    <h4 class="font-bold text-purple-400 mb-2">Phase 3: Universal ID</h4>
+                    <p class="text-xs text-slate-400">Decentralized professional identity portfolio verifiable on-chain
+                        across LinkedIn, GitHub, and corporate HR platforms.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: Summary & Final Call -->
+        <section class="slide flex-1 flex-col justify-center max-w-4xl mx-auto text-center space-y-6">
+            <div
+                class="inline-block mx-auto px-4 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-emerald-400 text-xs font-mono tracking-wider">
+                READY FOR MAINNET
+            </div>
+            <h2 class="text-4xl md:text-6xl font-extrabold text-white">
+                Bringing Real Trust to <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Global
+                    Education</span>
+            </h2>
+            <p class="text-base md:text-lg text-slate-400 max-w-xl mx-auto">
+                Fast. Immutable. Permissionless. Built on Solana Devnet for the Colosseum Hackathon.
+            </p>
+            <div class="pt-4 flex justify-center items-center gap-4 text-xs font-mono text-slate-400">
+                <span>GitHub Public Repository</span>
+                <span>•</span>
+                <span>Anchor Smart Contract Deployed</span>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Controls / Footer -->
+    <footer class="flex justify-between items-center border-t border-slate-800 pt-4 text-xs text-slate-500 font-mono">
+        <div>USE <span class="text-slate-300 font-bold">SPACE</span> OR <span class="text-slate-300 font-bold">← / →
+                ARROWS</span> TO NAVIGATE</div>
+        <div class="flex items-center gap-3">
+            <button onclick="prevSlide()"
+                class="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded font-bold transition">←
+                Prev</button>
+            <button onclick="nextSlide()"
+                class="px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded transition">Next
+                →</button>
+            <span id="slideCounterBottom" class="text-slate-400 font-bold pl-2">Slide 1 of 8</span>
+        </div>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const topCounter = document.getElementById('slideNumberTop');
+        const bottomCounter = document.getElementById('slideCounterBottom');
+
+        function renderSlide() {
+            slides.forEach((s, idx) => {
+                s.classList.toggle('active', idx === currentSlide);
+            });
+            const currentNumber = String(currentSlide + 1).padStart(2, '0');
+            const totalNumber = String(slides.length).padStart(2, '0');
+
+            topCounter.innerText = `${currentNumber} / ${totalNumber}`;
+            bottomCounter.innerText = `Slide ${currentSlide + 1} of ${slides.length}`;
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                renderSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                renderSlide();
+            }
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        renderSlide();
+    </script>
+</body>
+
+</html>
