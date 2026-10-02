@@ -40,7 +40,7 @@ CertiPulse solves this by anchoring cryptographic certificate hashes directly on
 ## 🚀 Getting Started & Local Setup
 
 **Clone the repository:**
-`git clone [https://github.com/Minz-rust/certipulse.git](https://github.com/Minz-rust/certipulse.git)`
+`git clone https://github.com/Minz-rust/certipulse.git`
 
 **Run local server:**
 Open `index.html` directly in your browser or run:
