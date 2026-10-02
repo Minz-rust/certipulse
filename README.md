@@ -1,41 +1,57 @@
-# ⚡ CertiPulse • On-Chain Credential Verification
+# CertiPulse
 
-> Decentralized, tamper-proof academic and professional credential registry built on Solana.  
-> **Submitted for the Solana Workshop / Hackathon ($50K Prize Track).**
+> Decentralized, tamper-proof credential verification protocol on Solana. Instant verification with zero Web3 friction for employers.
 
----
+[![Solana Devnet](https://img.shields.io/badge/Solana-Devnet-14F195?style=flat-square&logo=solana)](https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet)
+[![Live MVP](https://img.shields.io/badge/Live_MVP-Vercel-black?style=flat-square&logo=vercel)](https://certipulse-tau.vercel.app)
+[![Colosseum Hackathon](https://img.shields.io/badge/Colosseum-Hackathon_2026-6C5CE7?style=flat-square)](https://arena.colosseum.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 
-### 🎥 Project Presentation & Demo
-* 📺 **[Watch Product Demo Video (28s)]**(https://youtu.be/u8RML9GnAT0?si=0ApRB-wd_0KQirO0) — Live interface walkthrough & fraud detection test.
-* 🎙️ **[Watch Pitch Deck Video (1m)]**(https://youtu.be/yJjmL74qo7c?si=pIY45Az0VBaV65xs) — Problem overview, architecture & market vision.
+## 📌 Links & Resources
 
----
+* **Live MVP Demo:** [https://certipulse-tau.vercel.app](https://certipulse-tau.vercel.app)
+* **Pitch Deck:** [https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKecoqjW3u0ANYlD1Bd0hO7n2LiF4/edit?usp=sharing](https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKecoqjW3u0ANYlD1Bd0hO7n2LiF4/edit?usp=sharing)
+* **Program ID (Devnet):** `C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn`
 
-## 📌 Problem Overview
-Conventional digital certificates and PDF diplomas are trivially forged using basic photo editors. Employers, universities, and recruitment teams waste weeks on manual email inquiries or risk hiring candidates with fraudulent credentials.
+## 🎯 Overview
 
-## 💡 Solution
-CertiPulse registers cryptographic document fingerprints (SHA-256) directly into Solana Program Derived Addresses (PDAs):
-- **Instant Proof:** Educational institutions anchor credentials in sub-second transactions.
-- **Permissionless Verification:** Recruiters and HR verify credentials instantly without needing a Web3 wallet or browser extension.
-- **Tamper-Proof:** Altering even a single character in the document generates an immediate counterfeit alert.
+Credential fraud is a massive global issue: up to 85% of applicants embellish resumes, while manual verification takes 3–7 days and costs $20–$100+ per check.
 
----
+CertiPulse solves this by anchoring cryptographic certificate hashes directly onto the Solana blockchain via Program Derived Addresses (PDAs):
 
-## ⚡ Tech Stack & On-Chain Deployment
-- **Network:** Solana Devnet
-- **Program ID:** `C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn`
-- **Framework:** Anchor (Rust)
-- **Frontend:** HTML5, Tailwind CSS, JavaScript (SHA-256 Cryptography & Web3 RPC)
+* **Tamper-Proof:** Certificates cannot be forged or altered once registered.
+* **Zero Web3 Friction:** Employers and HR managers can instantly verify authenticity without crypto wallets or transaction fees.
+* **Sub-Second Finality:** Verification resolves in ~400ms using Solana high-performance RPCs.
 
----
+## 🏗 Tech Stack & Architecture
 
-## 🚀 Live Workflow
-1. **Issue:** Educational academy enters recipient credentials and clicks `Mint Proof to Solana`.
-2. **On-Chain Anchor:** A cryptographic SHA-256 hash is anchored onto the ledger under our Solana program.
-3. **Verify:** Employer enters the hash to verify authenticity. An altered document triggers an immediate fraud alert.
+* **Smart Contract:** Rust & Anchor Framework (Solana Program)
+* **Client Frontend:** Vanilla JavaScript, HTML5, Tailwind CSS
+* **Web3 Integration:** @solana/web3.js & RPC Devnet endpoint
+* **Hashing:** Client-side SHA-256 cryptographic verification
+* **Deployment:** Vercel edge deployment
 
----
+### How It Works
 
-## 📄 License
-MIT License. Built for the Solana Global Hackathon & Workshop.
+1. **Issuer (Academy):** Calculates Document Hash (SHA-256).
+2. **Anchor Program:** Stores hash & metadata inside Solana PDA account.
+3. **Verifier (HR):** Uploads PDF or enters ID to check hash against Solana Devnet.
+
+## 🚀 Getting Started & Local Setup
+
+**Clone the repository:**
+`git clone [https://github.com/Minz-rust/certipulse.git](https://github.com/Minz-rust/certipulse.git)`
+
+**Run local server:**
+Open `index.html` directly in your browser or run:
+`npx serve .`
+
+## 📜 On-Chain Program Details
+
+* **Network:** Solana Devnet
+* **Program ID:** `C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn`
+* **Solana Explorer:** [https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet](https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet)
+
+## 👥 Team
+
+* **Akbari Ferdaus** — Solo Founder & Developer (Rust / Solana / Web3)
