@@ -147,6 +147,7 @@
           <p><span class="text-gray-500">Program ID:</span> C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn</p>
           <p><span class="text-gray-500">Certificate PDA:</span> <span id="outPda" class="text-teal-300"></span></p>
           <p><span class="text-gray-500">SHA-256 Hash:</span> <span id="outHash" class="text-gray-400 break-all"></span></p>
+          <p class="text-[11px] text-gray-400 pt-1">Now switch to the "Verify Credential" tab to verify this record.</p>
         </div>
       </div>
 
@@ -155,9 +156,9 @@
         <div>
           <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Certificate ID</label>
           <div class="relative">
-            <input id="certInput" type="text" placeholder="e.g. CERT-2026-SOLANA-001" value="CERT-2026-SOLANA-001" class="w-full bg-brandDark border border-borderCol rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand font-mono">
+            <input id="certInput" type="text" placeholder="Enter Certificate ID" value="CERT-2026-SOLANA-001" class="w-full bg-brandDark border border-borderCol rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand font-mono">
             <button type="button" onclick="document.getElementById('certInput').value='CERT-2026-SOLANA-001'" class="absolute right-2 top-2 text-xs bg-borderCol/60 hover:bg-borderCol text-gray-300 px-2.5 py-1.5 rounded transition">
-              Sample ID
+              Reset ID
             </button>
           </div>
         </div>
@@ -187,7 +188,7 @@
               <p id="statusSubtitle" class="text-xs text-gray-400 font-mono"></p>
             </div>
           </div>
-          <div id="resultDetails" class="space-y-2 pt-2 border-t border-borderCol/50 text-xs text-gray-300 font-mono">
+          <div id="resultDetails" class="space-y-2 pt-2 border-t border-borderCol/50 text-xs text-gray-300 font-mono hidden">
             <div class="flex justify-between">
               <span class="text-gray-500">Student:</span>
               <span id="resStudent" class="font-semibold text-white"></span>
@@ -225,12 +226,12 @@
   </footer>
 
   <script>
-    // State of registered certificates
-    let certificateRegistry = {
+    // In-memory on-chain registry simulation
+    const certificateRegistry = {
       "CERT-2026-SOLANA-001": {
         student: "Akbari Ferdaus",
         course: "Solana Smart Contract Engineering",
-        pda: "4wz3TVrJ2jBcx4CJeUxkyznC4q98LErU614JFw48JEH",
+        pda: "PDA_SOL_8849204921",
         hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       }
     };
@@ -261,15 +262,18 @@
         const file = input.files[0];
         document.getElementById('fileLabel').innerText = "Selected: " + file.name;
         
-        // Compute real SHA-256 hash using Web Crypto API
-        const arrayBuffer = await file.arrayBuffer();
-        const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        uploadedFileHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+          const hashArray = Array.from(new Uint8Array(hashBuffer));
+          uploadedFileHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-        const label = document.getElementById('computedHashLabel');
-        label.classList.remove('hidden');
-        label.innerText = "SHA-256: " + uploadedFileHash.substring(0, 24) + "...";
+          const label = document.getElementById('computedHashLabel');
+          label.classList.remove('hidden');
+          label.innerText = "SHA-256: " + uploadedFileHash.substring(0, 24) + "...";
+        } catch (e) {
+          console.error("Hash calculation failed", e);
+        }
       }
     }
 
@@ -284,20 +288,21 @@
         return;
       }
 
-      const dummyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
       const pdaAccount = "PDA_" + Math.random().toString(36).substring(2, 12).toUpperCase();
+      const mockHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
-      // Register certificate in dynamic storage
+      // Register new record
       certificateRegistry[certId] = {
         student: student,
         course: course,
         pda: pdaAccount,
-        hash: dummyHash
+        hash: mockHash
       };
 
       successBox.classList.remove('hidden');
       document.getElementById('outPda').innerText = pdaAccount;
-      document.getElementById('outHash').innerText = dummyHash;
+      document.getElementById('outHash').innerText = mockHash;
+      document.getElementById('certInput').value = certId;
     }
 
     function verifyCertificate() {
@@ -310,16 +315,23 @@
 
       resultBox.classList.remove('hidden');
 
-      const record = certificateRegistry[inputId];
+      // STRICT EQUALITY: ID MUST EXIST IN REGISTRY
+      if (certificateRegistry.hasOwnProperty(inputId)) {
+        const record = certificateRegistry[inputId];
 
-      // Exact match check: ID must exist in on-chain registry
-      if (record) {
-        // If file was uploaded, verify document hash match
+        // If a file was uploaded and hash doesn't match
         if (uploadedFileHash && uploadedFileHash !== record.hash) {
-          showError("Tampered Document Detected", "File hash does not match the on-chain recorded fingerprint.");
+          resultBox.className = "rounded-xl p-5 border border-red-500/50 bg-red-500/5 text-sm";
+          statusIcon.className = "w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center font-bold";
+          statusIcon.innerHTML = '<i class="fas fa-times"></i>';
+          statusTitle.className = "font-bold text-base text-red-400";
+          statusTitle.innerText = "Tampered Document Detected";
+          statusSubtitle.innerText = "PDF hash does not match on-chain record";
+          resultDetails.classList.add('hidden');
           return;
         }
 
+        // Success state
         resultBox.className = "rounded-xl p-5 border border-brand/50 bg-brand/5 text-sm";
         statusIcon.className = "w-8 h-8 rounded-full bg-brand/20 text-brand flex items-center justify-center font-bold";
         statusIcon.innerHTML = '<i class="fas fa-check"></i>';
@@ -330,19 +342,15 @@
         resultDetails.classList.remove('hidden');
         document.getElementById('resStudent').innerText = record.student;
         document.getElementById('resCourse').innerText = record.course;
-        document.getElementById('resStatus').className = "font-semibold text-brand";
         document.getElementById('resStatus').innerText = "Valid & Immutably Anchored";
       } else {
-        showError("Certificate Record Not Found", "No on-chain PDA account matches this Certificate ID on Devnet.");
-      }
-
-      function showError(title, subtitle) {
+        // STRICT ERROR STATE
         resultBox.className = "rounded-xl p-5 border border-red-500/50 bg-red-500/5 text-sm";
         statusIcon.className = "w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center font-bold";
         statusIcon.innerHTML = '<i class="fas fa-times"></i>';
         statusTitle.className = "font-bold text-base text-red-400";
-        statusTitle.innerText = title;
-        statusSubtitle.innerText = subtitle;
+        statusTitle.innerText = "Certificate Record Not Found";
+        statusSubtitle.innerText = "No on-chain PDA matches ID: " + (inputId || "empty");
         resultDetails.classList.add('hidden');
       }
     }
