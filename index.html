@@ -119,7 +119,7 @@
         </button>
       </div>
 
-      <!-- TAB 1: ISSUE CERTIFICATE FORM (as shown in demo) -->
+      <!-- TAB 1: ISSUE CERTIFICATE FORM -->
       <div id="tabIssue" class="bg-cardBg border border-borderCol rounded-2xl p-6 sm:p-8 shadow-2xl space-y-4">
         <div>
           <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Student Full Name</label>
@@ -154,13 +154,31 @@
       <div id="tabVerify" class="hidden bg-cardBg border border-borderCol rounded-2xl p-6 sm:p-8 shadow-2xl space-y-5">
         <div>
           <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Certificate ID</label>
-          <input id="certInput" type="text" placeholder="e.g. CERT-2026-SOLANA-001" value="CERT-2026-SOLANA-001" class="w-full bg-brandDark border border-borderCol rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand font-mono">
+          <div class="relative">
+            <input id="certInput" type="text" placeholder="e.g. CERT-2026-SOLANA-001" value="CERT-2026-SOLANA-001" class="w-full bg-brandDark border border-borderCol rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand font-mono">
+            <button type="button" onclick="document.getElementById('certInput').value='CERT-2026-SOLANA-001'" class="absolute right-2 top-2 text-xs bg-borderCol/60 hover:bg-borderCol text-gray-300 px-2.5 py-1.5 rounded transition">
+              Sample ID
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
+            Upload Document (PDF Verification)
+          </label>
+          <div class="border-2 border-dashed border-borderCol hover:border-gray-500 rounded-lg p-6 text-center cursor-pointer bg-brandDark/50 transition" onclick="document.getElementById('fileUpload').click()">
+            <input type="file" id="fileUpload" accept="application/pdf" class="hidden" onchange="handleFile(this)">
+            <i class="fas fa-file-pdf text-3xl text-gray-500 mb-2"></i>
+            <p class="text-xs text-gray-400" id="fileLabel">Drop PDF diploma or click to compute local hash</p>
+            <p class="text-[10px] text-teal-400 font-mono mt-1 hidden" id="computedHashLabel"></p>
+          </div>
         </div>
 
         <button onclick="verifyCertificate()" class="w-full py-3.5 rounded-lg bg-brand text-black font-bold text-sm hover:bg-brand/90 transition flex items-center justify-center gap-2 shadow-lg shadow-brand/10">
           <i class="fas fa-search"></i> Verify on Solana
         </button>
 
+        <!-- Status Result Output -->
         <div id="resultBox" class="hidden rounded-xl p-5 border text-sm transition-all duration-300">
           <div class="flex items-center gap-3 mb-3">
             <div id="statusIcon" class="w-8 h-8 rounded-full flex items-center justify-center font-bold"></div>
@@ -169,7 +187,7 @@
               <p id="statusSubtitle" class="text-xs text-gray-400 font-mono"></p>
             </div>
           </div>
-          <div class="space-y-2 pt-2 border-t border-borderCol/50 text-xs text-gray-300 font-mono">
+          <div id="resultDetails" class="space-y-2 pt-2 border-t border-borderCol/50 text-xs text-gray-300 font-mono">
             <div class="flex justify-between">
               <span class="text-gray-500">Student:</span>
               <span id="resStudent" class="font-semibold text-white"></span>
@@ -180,7 +198,7 @@
             </div>
             <div class="flex justify-between">
               <span class="text-gray-500">Status:</span>
-              <span class="font-semibold text-brand">Valid & Immutably Anchored</span>
+              <span id="resStatus" class="font-semibold text-brand">Valid & Immutably Anchored</span>
             </div>
           </div>
         </div>
@@ -207,6 +225,18 @@
   </footer>
 
   <script>
+    // State of registered certificates
+    let certificateRegistry = {
+      "CERT-2026-SOLANA-001": {
+        student: "Akbari Ferdaus",
+        course: "Solana Smart Contract Engineering",
+        pda: "4wz3TVrJ2jBcx4CJeUxkyznC4q98LErU614JFw48JEH",
+        hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    };
+
+    let uploadedFileHash = null;
+
     function switchTab(tab) {
       const tabIssue = document.getElementById('tabIssue');
       const tabVerify = document.getElementById('tabVerify');
@@ -226,6 +256,23 @@
       }
     }
 
+    async function handleFile(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        document.getElementById('fileLabel').innerText = "Selected: " + file.name;
+        
+        // Compute real SHA-256 hash using Web Crypto API
+        const arrayBuffer = await file.arrayBuffer();
+        const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        uploadedFileHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        const label = document.getElementById('computedHashLabel');
+        label.classList.remove('hidden');
+        label.innerText = "SHA-256: " + uploadedFileHash.substring(0, 24) + "...";
+      }
+    }
+
     function handleIssue() {
       const student = document.getElementById('issStudent').value.trim();
       const course = document.getElementById('issCourse').value.trim();
@@ -237,40 +284,66 @@
         return;
       }
 
+      const dummyHash = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+      const pdaAccount = "PDA_" + Math.random().toString(36).substring(2, 12).toUpperCase();
+
+      // Register certificate in dynamic storage
+      certificateRegistry[certId] = {
+        student: student,
+        course: course,
+        pda: pdaAccount,
+        hash: dummyHash
+      };
+
       successBox.classList.remove('hidden');
-      document.getElementById('outPda').innerText = "PDA_" + Math.random().toString(36).substring(2, 12).toUpperCase();
-      document.getElementById('outHash').innerText = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+      document.getElementById('outPda').innerText = pdaAccount;
+      document.getElementById('outHash').innerText = dummyHash;
     }
 
     function verifyCertificate() {
-      const input = document.getElementById('certInput').value.trim();
+      const inputId = document.getElementById('certInput').value.trim();
       const resultBox = document.getElementById('resultBox');
       const statusIcon = document.getElementById('statusIcon');
       const statusTitle = document.getElementById('statusTitle');
       const statusSubtitle = document.getElementById('statusSubtitle');
+      const resultDetails = document.getElementById('resultDetails');
 
       resultBox.classList.remove('hidden');
 
-      if (input.length > 5) {
+      const record = certificateRegistry[inputId];
+
+      // Exact match check: ID must exist in on-chain registry
+      if (record) {
+        // If file was uploaded, verify document hash match
+        if (uploadedFileHash && uploadedFileHash !== record.hash) {
+          showError("Tampered Document Detected", "File hash does not match the on-chain recorded fingerprint.");
+          return;
+        }
+
         resultBox.className = "rounded-xl p-5 border border-brand/50 bg-brand/5 text-sm";
         statusIcon.className = "w-8 h-8 rounded-full bg-brand/20 text-brand flex items-center justify-center font-bold";
         statusIcon.innerHTML = '<i class="fas fa-check"></i>';
         statusTitle.className = "font-bold text-base text-brand";
         statusTitle.innerText = "Verified Authentic Credential";
-        statusSubtitle.innerText = "Confirmed on Solana Devnet";
+        statusSubtitle.innerText = "Confirmed on Solana Devnet PDA";
 
-        document.getElementById('resStudent').innerText = document.getElementById('issStudent').value || "Akbari Ferdaus";
-        document.getElementById('resCourse').innerText = document.getElementById('issCourse').value || "Solana Smart Contract Engineering";
+        resultDetails.classList.remove('hidden');
+        document.getElementById('resStudent').innerText = record.student;
+        document.getElementById('resCourse').innerText = record.course;
+        document.getElementById('resStatus').className = "font-semibold text-brand";
+        document.getElementById('resStatus').innerText = "Valid & Immutably Anchored";
       } else {
+        showError("Certificate Record Not Found", "No on-chain PDA account matches this Certificate ID on Devnet.");
+      }
+
+      function showError(title, subtitle) {
         resultBox.className = "rounded-xl p-5 border border-red-500/50 bg-red-500/5 text-sm";
         statusIcon.className = "w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center font-bold";
         statusIcon.innerHTML = '<i class="fas fa-times"></i>';
         statusTitle.className = "font-bold text-base text-red-400";
-        statusTitle.innerText = "Certificate Not Found";
-        statusSubtitle.innerText = "No on-chain record matches the query";
-
-        document.getElementById('resStudent').innerText = "—";
-        document.getElementById('resCourse').innerText = "—";
+        statusTitle.innerText = title;
+        statusSubtitle.innerText = subtitle;
+        resultDetails.classList.add('hidden');
       }
     }
   </script>
