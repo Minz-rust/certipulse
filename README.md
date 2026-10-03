@@ -116,15 +116,14 @@ npx serve .
 ---
 
 ## Resources
-Live Application: https://certipulse-tau.vercel.app/
 
-Colosseum Submission: https://colosseum.com/arena/projects/15119/submission
+* [Live Application](https://certipulse-tau.vercel.app/)
+* [Colosseum Submission](https://colosseum.com/arena/projects/project-name-ctoto)
+* [Project Presentation](https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKecoqjW3u0ANYlD1Bd0hO7n2LiF4/edit?slide=id.p1#slide=id.p1)
+* [Solana Devnet Explorer](https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet)
+* [Video Demo](https://youtu.be/u8RML9GnAT0?si=voje9t_4Z2TTtQSp)
 
-Project Presentation: https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKecoqjW3u0ANYlD1Bd0hO7n2LiF4/edit?slide=id.p1#slide=id.p1
-
-Solana Devnet Explorer: https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet
-
-Video Demo: https://youtu.be/u8RML9GnAT0?si=voje9t_4Z2TTtQSp
+---
 
 ## License
 
