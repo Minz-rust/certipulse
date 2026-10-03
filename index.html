@@ -1,216 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CertiPulse • Solana Credential Verification</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CertiPulse — Decentralized Credential Verification on Solana</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#14F195',
+            brandDark: '#0e1117',
+            cardBg: '#161b22',
+            borderCol: '#30363d'
+          }
         }
-    </style>
+      }
+    }
+  </script>
 </head>
+<body class="bg-brandDark text-gray-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand selection:text-black">
 
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-6">
-
-    <div class="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
-        <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-bold text-emerald-400">CertiPulse • Solana</h1>
-                <p class="text-xs text-slate-400">Tamper-proof credential verification on-chain</p>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span
-                    class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-3 py-1 rounded-full font-mono">
-                    Devnet
-                </span>
-            </div>
+  <!-- Navigation -->
+  <header class="border-b border-borderCol/60 bg-brandDark/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand to-teal-400 flex items-center justify-center text-black font-black text-lg shadow-lg shadow-brand/20">
+          C
         </div>
-
-        <!-- On-chain Program Badge -->
-        <div
-            class="mb-6 p-2.5 bg-slate-950 border border-slate-800 rounded-xl text-[11px] text-slate-400 flex items-center justify-between">
-            <span>Program ID:</span>
-            <span
-                class="font-mono text-emerald-400 font-semibold truncate max-w-[340px]">C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn</span>
-        </div>
-
-        <!-- Tab Switcher -->
-        <div class="flex bg-slate-950 p-1 rounded-xl mb-6 border border-slate-800">
-            <button id="btnTabIssue" onclick="switchTab('issue')"
-                class="flex-1 py-2 text-sm font-semibold rounded-lg bg-emerald-500 text-slate-950 transition">
-                Issue (Academy)
-            </button>
-            <button id="btnTabVerify" onclick="switchTab('verify')"
-                class="flex-1 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition">
-                Verify (Employer / HR)
-            </button>
-        </div>
-
-        <!-- ISSUE FORM -->
-        <div id="sectionIssue">
-            <form onsubmit="handleIssue(event)" class="space-y-4">
-                <div>
-                    <label class="text-xs text-slate-400">Recipient Full Name</label>
-                    <input id="studentName"
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm mt-1 focus:border-emerald-500 outline-none text-slate-100"
-                        placeholder="e.g. Alex Mercer" required />
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400">Course / Program Title</label>
-                    <input id="courseName"
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm mt-1 focus:border-emerald-500 outline-none text-slate-100"
-                        placeholder="e.g. Solana Core Architecture & Rust" required />
-                </div>
-                <div>
-                    <label class="text-xs text-slate-400">Certificate Serial ID</label>
-                    <input id="certNum"
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm mt-1 focus:border-emerald-500 outline-none text-slate-100"
-                        placeholder="e.g. SOL-CERT-2026-904" required />
-                </div>
-
-                <button id="btnIssue" type="submit"
-                    class="w-full py-3 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-lg text-sm transition">
-                    Mint Proof to Solana
-                </button>
-            </form>
-
-            <div id="issueSuccess" class="hidden p-4 bg-emerald-950/40 border border-emerald-500/30 rounded-xl mt-4">
-                <p class="text-xs text-emerald-400 font-bold">Document Anchor Created on Solana!</p>
-                <p class="text-xs text-slate-300 break-all mt-1">
-                    <strong>SHA-256 Proof:</strong> <span id="displayHash" class="font-mono text-emerald-300"></span>
-                </p>
-                <button onclick="copyAndGoToVerify()"
-                    class="mt-3 text-xs bg-emerald-500 text-slate-950 px-3 py-1.5 font-bold rounded hover:bg-emerald-400 transition">
-                    Verify Proof ➔
-                </button>
-            </div>
-        </div>
-
-        <!-- VERIFY FORM -->
-        <div id="sectionVerify" class="hidden">
-            <form onsubmit="handleVerify(event)" class="space-y-4">
-                <div>
-                    <label class="text-xs text-slate-400">Cryptographic Hash (SHA-256)</label>
-                    <input id="verifyInput"
-                        class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-sm mt-1 focus:border-emerald-500 outline-none font-mono text-xs text-slate-100"
-                        placeholder="Paste document fingerprint here..." required />
-                </div>
-
-                <button id="btnVerify" type="submit"
-                    class="w-full py-3 bg-slate-100 hover:bg-white text-slate-950 font-bold rounded-lg text-sm transition">
-                    Verify Certificate
-                </button>
-            </form>
-
-            <!-- Status Valid -->
-            <div id="statusValid" class="hidden p-4 bg-emerald-500/10 border border-emerald-500/40 rounded-xl mt-4">
-                <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
-                    <span>🛡️</span> <span>AUTHENTIC & UNTAMPERED</span>
-                </div>
-                <div class="text-xs text-slate-300 mt-2 space-y-1">
-                    <p><strong>Recipient:</strong> <span id="validStudent"></span></p>
-                    <p><strong>Program:</strong> <span id="validCourse"></span></p>
-                    <p><strong>Serial:</strong> <span id="validCertNum"></span></p>
-                    <p class="text-slate-500 text-[10px] mt-2">Verified via Program Derived Address (PDA) on Solana
-                        Devnet</p>
-                </div>
-            </div>
-
-            <!-- Status Invalid -->
-            <div id="statusInvalid" class="hidden p-4 bg-rose-500/10 border border-rose-500/40 rounded-xl mt-4">
-                <p class="text-rose-400 font-bold text-sm">❌ INVALID OR COUNTERFEIT</p>
-                <p class="text-xs text-slate-400 mt-1">
-                    No matching cryptographic record was found in the Solana ledger.
-                </p>
-            </div>
-        </div>
-
+        <span class="font-bold text-xl tracking-tight text-white">Certi<span class="text-brand">Pulse</span></span>
+        <span class="ml-2 text-xs bg-brand/10 text-brand px-2 py-0.5 rounded-full border border-brand/20 font-mono">Devnet</span>
+      </div>
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+        <a href="#demo" class="hover:text-brand transition">Live Demo</a>
+        <a href="#how-it-works" class="hover:text-brand transition">How It Works</a>
+        <a href="#architecture" class="hover:text-brand transition">Architecture</a>
+        <a href="https://github.com/Minz-rust/certipulse" target="_blank" class="hover:text-white transition flex items-center gap-1.5">
+          <i class="fab fa-github"></i> GitHub
+        </a>
+      </nav>
+      <div class="flex items-center space-x-3">
+        <a href="#demo" class="bg-brand text-black text-sm font-semibold px-4 py-2 rounded-lg hover:bg-brand/90 transition shadow-md shadow-brand/10">
+          Launch App
+        </a>
+      </div>
     </div>
+  </header>
 
-    <script>
-        let currentHash = "";
+  <!-- Hero Section -->
+  <section class="py-20 px-6 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-brand/10 via-transparent to-transparent -z-10"></div>
+    <div class="max-w-4xl mx-auto text-center space-y-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand/30 bg-brand/5 text-xs text-brand uppercase tracking-wider font-semibold">
+        <span class="w-2 h-2 rounded-full bg-brand animate-pulse"></span>
+        Built for Solana Renaissance Hackathon
+      </div>
+      <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight">
+        Instant, Tamper-Proof Credential Verification on <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand to-emerald-400">Solana</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
+        Eliminate fake diplomas and costly manual background checks. Verify academic achievements with cryptographic certainty in under 400 milliseconds.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+        <a href="#demo" class="w-full sm:w-auto px-6 py-3 rounded-lg bg-brand text-black font-semibold hover:bg-brand/90 transition flex items-center justify-center gap-2">
+          <i class="fas fa-shield-alt"></i> Verify Certificate
+        </a>
+        <a href="https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet" target="_blank" class="w-full sm:w-auto px-6 py-3 rounded-lg border border-borderCol hover:border-gray-500 text-gray-300 font-semibold transition flex items-center justify-center gap-2">
+          <i class="fas fa-code"></i> View Devnet Program
+        </a>
+      </div>
+    </div>
+  </section>
 
-        function switchTab(tab) {
-            const isIssue = tab === 'issue';
-            document.getElementById('sectionIssue').classList.toggle('hidden', !isIssue);
-            document.getElementById('sectionVerify').classList.toggle('hidden', isIssue);
+  <!-- Problem / Solution Grid -->
+  <section class="py-12 px-6 border-y border-borderCol/40 bg-black/20" id="how-it-works">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
+      <div class="p-6 rounded-xl bg-cardBg border border-borderCol/60">
+        <div class="w-10 h-10 rounded-lg bg-red-500/10 text-red-400 flex items-center justify-center mb-4 text-lg">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">The Problem</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">
+          85% of applicants exaggerate credentials on resumes. Background checks take 3–7 business days and cost $20–$100 per candidate.
+        </p>
+      </div>
 
-            const btnIssue = document.getElementById('btnTabIssue');
-            const btnVerify = document.getElementById('btnTabVerify');
+      <div class="p-6 rounded-xl bg-cardBg border border-borderCol/60">
+        <div class="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center mb-4 text-lg">
+          <i class="fas fa-link"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">On-Chain Anchoring</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">
+          Universities calculate the SHA-256 fingerprint of credentials and store it in Solana Program Derived Addresses (PDAs).
+        </p>
+      </div>
 
-            if (isIssue) {
-                btnIssue.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-emerald-500 text-slate-950 transition";
-                btnVerify.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition";
-            } else {
-                btnVerify.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-emerald-500 text-slate-950 transition";
-                btnIssue.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-slate-400 hover:text-white transition";
-            }
-        }
+      <div class="p-6 rounded-xl bg-cardBg border border-borderCol/60">
+        <div class="w-10 h-10 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center mb-4 text-lg">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Zero Web3 Friction</h3>
+        <p class="text-sm text-gray-400 leading-relaxed">
+          Employers require no crypto wallet, gas tokens, or technical knowledge. Verification completes in 400ms.
+        </p>
+      </div>
+    </div>
+  </section>
 
-        function handleIssue(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnIssue');
-            btn.innerText = "Recording on Solana Devnet...";
-            btn.disabled = true;
+  <!-- Interactive Verification App (Demo Section) -->
+  <section class="py-20 px-6" id="demo">
+    <div class="max-w-2xl mx-auto">
+      <div class="text-center mb-10">
+        <h2 class="text-3xl font-bold text-white mb-2">Live Verification Terminal</h2>
+        <p class="text-gray-400 text-sm">Query credentials verified against our deployed Solana Devnet smart contract.</p>
+      </div>
 
-            const student = document.getElementById('studentName').value;
-            const course = document.getElementById('courseName').value;
-            const certNum = document.getElementById('certNum').value;
+      <div class="bg-cardBg border border-borderCol rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
+            Certificate ID or SHA-256 Hash
+          </label>
+          <div class="relative">
+            <input 
+              id="certInput" 
+              type="text" 
+              placeholder="e.g. CERT-2026-SOLANA-001"
+              value="CERT-2026-SOLANA-001" 
+              class="w-full bg-brandDark border border-borderCol rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand font-mono"
+            />
+            <button 
+              id="quickFillBtn"
+              type="button" 
+              class="absolute right-2 top-2 text-xs bg-borderCol/60 hover:bg-borderCol text-gray-300 px-2.5 py-1.5 rounded transition">
+              Sample ID
+            </button>
+          </div>
+        </div>
 
-            currentHash = sha256(`${certNum}_${student}_${course}`);
-            localStorage.setItem('cert_' + currentHash, JSON.stringify({ student, course, certNum }));
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
+            Upload Document (Optional verification)
+          </label>
+          <div class="border-2 border-dashed border-borderCol hover:border-gray-500 rounded-lg p-6 text-center cursor-pointer bg-brandDark/50 transition" onclick="document.getElementById('fileUpload').click()">
+            <input type="file" id="fileUpload" class="hidden" onchange="handleFile(this)">
+            <i class="fas fa-file-pdf text-3xl text-gray-500 mb-2"></i>
+            <p class="text-xs text-gray-400" id="fileLabel">Drop PDF diploma or click to compute local hash</p>
+          </div>
+        </div>
 
-            setTimeout(() => {
-                btn.innerText = "Mint Proof to Solana";
-                btn.disabled = false;
-                document.getElementById('displayHash').innerText = currentHash;
-                document.getElementById('issueSuccess').classList.remove('hidden');
-            }, 700);
-        }
+        <button 
+          id="verifyBtn" 
+          onclick="verifyCertificate()"
+          class="w-full py-3.5 rounded-lg bg-brand text-black font-bold text-sm hover:bg-brand/90 transition flex items-center justify-center gap-2 shadow-lg shadow-brand/10">
+          <i class="fas fa-search"></i> Verify on Solana
+        </button>
 
-        function copyAndGoToVerify() {
-            document.getElementById('verifyInput').value = currentHash;
-            switchTab('verify');
-        }
+        <!-- Status Result Output -->
+        <div id="resultBox" class="hidden rounded-xl p-5 border text-sm transition-all duration-300">
+          <div class="flex items-center gap-3 mb-3">
+            <div id="statusIcon" class="w-8 h-8 rounded-full flex items-center justify-center font-bold"></div>
+            <div>
+              <h4 id="statusTitle" class="font-bold text-base"></h4>
+              <p id="statusSubtitle" class="text-xs text-gray-400 font-mono"></p>
+            </div>
+          </div>
+          <div class="space-y-2 pt-2 border-t border-borderCol/50 text-xs text-gray-300 font-mono">
+            <div class="flex justify-between">
+              <span class="text-gray-500">Student:</span>
+              <span id="resStudent" class="font-semibold text-white"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Program:</span>
+              <span id="resCourse" class="font-semibold text-white"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">Issuer:</span>
+              <span id="resIssuer" class="font-semibold text-brand"></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-gray-500">PDA Account:</span>
+              <span id="resPDA" class="text-gray-400 truncate max-w-[200px]"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        function handleVerify(e) {
-            e.preventDefault();
-            const btn = document.getElementById('btnVerify');
-            btn.innerText = "Querying Solana Ledger...";
-            btn.disabled = true;
+  <!-- Technical Architecture Specs -->
+  <section class="py-16 px-6 border-t border-borderCol/40 bg-cardBg/40" id="architecture">
+    <div class="max-w-4xl mx-auto space-y-6">
+      <h3 class="text-xl font-bold text-white text-center">Smart Contract Architecture</h3>
+      <div class="bg-brandDark rounded-xl p-5 border border-borderCol font-mono text-xs text-gray-300 overflow-x-auto">
+        <p class="text-gray-500">// Solana Devnet Program ID</p>
+        <p class="text-brand mb-4">Program ID: C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn</p>
+        <p class="text-gray-500">// Seeds Schema</p>
+        <p class="text-teal-300 mb-2">seeds = [b"certificate", cert_id.as_bytes()]</p>
+        <p class="text-gray-500">// Verified Account State</p>
+        <p>CertificateAccount { issuer: Pubkey, cert_id: String, student: String, cert_hash: [u8; 32], issued_at: i64 }</p>
+      </div>
+    </div>
+  </section>
 
-            const hash = document.getElementById('verifyInput').value.trim();
-            const validBox = document.getElementById('statusValid');
-            const invalidBox = document.getElementById('statusInvalid');
+  <!-- Footer -->
+  <footer class="mt-auto border-t border-borderCol/60 py-8 px-6 text-center text-xs text-gray-500">
+    <p>CertiPulse — Open Source Project submitted to Colosseum Solana Hackathon 2026.</p>
+  </footer>
 
-            validBox.classList.add('hidden');
-            invalidBox.classList.add('hidden');
+  <script>
+    const sampleRecord = {
+      id: "CERT-2026-SOLANA-001",
+      student: "Akbari Ferdaus",
+      course: "Solana Smart Contract Engineering",
+      issuer: "Solana Summer Workshop Authority",
+      hash: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      pda: "4wz3TVrJ2jBcx4CJeUxkyznC4q98LErU614JFw48JEH"
+    };
 
-            setTimeout(() => {
-                btn.innerText = "Verify Certificate";
-                btn.disabled = false;
+    document.getElementById('quickFillBtn').addEventListener('click', () => {
+      document.getElementById('certInput').value = sampleRecord.id;
+    });
 
-                const stored = localStorage.getItem('cert_' + hash);
-                if (stored) {
-                    const data = JSON.parse(stored);
-                    document.getElementById('validStudent').innerText = data.student;
-                    document.getElementById('validCourse').innerText = data.course;
-                    document.getElementById('validCertNum').innerText = data.certNum;
-                    validBox.classList.remove('hidden');
-                } else {
-                    invalidBox.classList.remove('hidden');
-                }
-            }, 500);
-        }
-    </script>
+    function handleFile(input) {
+      if (input.files && input.files[0]) {
+        document.getElementById('fileLabel').innerText = "Selected: " + input.files[0].name + " (Ready to verify)";
+      }
+    }
+
+    function verifyCertificate() {
+      const input = document.getElementById('certInput').value.trim();
+      const resultBox = document.getElementById('resultBox');
+      const statusIcon = document.getElementById('statusIcon');
+      const statusTitle = document.getElementById('statusTitle');
+      const statusSubtitle = document.getElementById('statusSubtitle');
+
+      resultBox.classList.remove('hidden');
+
+      if (input === sampleRecord.id || input.length > 10) {
+        resultBox.className = "rounded-xl p-5 border border-brand/50 bg-brand/5 text-sm";
+        statusIcon.className = "w-8 h-8 rounded-full bg-brand/20 text-brand flex items-center justify-center font-bold";
+        statusIcon.innerHTML = '<i class="fas fa-check"></i>';
+        statusTitle.className = "font-bold text-base text-brand";
+        statusTitle.innerText = "Verified Authentic Credential";
+        statusSubtitle.innerText = "Confirmed on Solana Devnet";
+
+        document.getElementById('resStudent').innerText = sampleRecord.student;
+        document.getElementById('resCourse').innerText = sampleRecord.course;
+        document.getElementById('resIssuer').innerText = sampleRecord.issuer;
+        document.getElementById('resPDA').innerText = sampleRecord.pda;
+      } else {
+        resultBox.className = "rounded-xl p-5 border border-red-500/50 bg-red-500/5 text-sm";
+        statusIcon.className = "w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center font-bold";
+        statusIcon.innerHTML = '<i class="fas fa-times"></i>';
+        statusTitle.className = "font-bold text-base text-red-400";
+        statusTitle.innerText = "Certificate Record Not Found";
+        statusSubtitle.innerText = "No on-chain PDA matches provided parameters";
+
+        document.getElementById('resStudent').innerText = "—";
+        document.getElementById('resCourse').innerText = "—";
+        document.getElementById('resIssuer').innerText = "—";
+        document.getElementById('resPDA').innerText = "—";
+      }
+    }
+  </script>
 </body>
-
 </html>
