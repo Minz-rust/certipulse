@@ -2,7 +2,7 @@
 
 [![Solana Devnet](https://img.shields.io/badge/Solana-devnet-blueviolet)](https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Colosseum 2026](https://img.shields.io/badge/Colosseum-2026-blue)](https://arena.colosseum.org)
+[![Colosseum 2026](https://img.shields.io/badge/Colosseum-2026-blue)](https://colosseum.com/arena/projects/project-name-ctoto)
 
 > Decentralized, tamper-proof credential verification protocol on Solana — eliminates fake diplomas and reduces background check turnaround from days to ~400 ms.
 
