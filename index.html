@@ -314,7 +314,6 @@
 
       // Exact match check: ID must exist in on-chain registry
       if (record) {
-        // If file was uploaded, verify document hash match
         if (uploadedFileHash && uploadedFileHash !== record.hash) {
           showError("Tampered Document Detected", "File hash does not match the on-chain recorded fingerprint.");
           return;
