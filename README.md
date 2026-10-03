@@ -66,16 +66,20 @@
 
 ## Architecture
 
+```text
 +--------------------+       +-----------------------------+       +-------------------+
 | Issuing Authority  | ----> |      CertiPulse Relay       | ----> | Solana Devnet     |
 | (University / Web) |       | (SHA-256 Hash Computation)  |       | (Anchor Program)  |
 +--------------------+       +-----------------------------+       +-------------------+
-|                                |
-v                                v
-+-------------------------+         +-------------------+
-| Deterministic PDA Seed  | ------> | Validated Account |
-| [b"certificate", id]    |         | (Immutable State) |
-+-------------------------+         +-------------------+
+                                            |                                |
+                                            v                                v
+                               +-------------------------+         +-------------------+
+                               | Deterministic PDA Seed  | ------> | Validated Account |
+                               |  [b"certificate", id]   |         | (Immutable State) |
+                               +-------------------------+         +-------------------+
+```
+
+See [programs/certipulse/src/lib.rs](programs/certipulse/src/lib.rs) for smart contract implementation.
 
 ---
 
