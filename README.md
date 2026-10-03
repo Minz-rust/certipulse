@@ -6,7 +6,7 @@
 
 > Decentralized, tamper-proof credential verification protocol on Solana — eliminates fake diplomas and reduces background check turnaround from days to ~400 ms.
 
-[Live Demo](https://certipulse-tau.vercel.app) · [Video Walkthrough](https://colosseum.com/arena/projects/15119/submission) · [Pitch Deck](https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKecoqjW3u0ANYlD1Bd0hO7n2LiF4/edit?usp=sharing) · [Colosseum Submission](https://colosseum.com/arena/projects/15119/submission)
+[Live Demo](https://certipulse-tau.vercel.app) · [Video Walkthrough]((https://youtu.be/u8RML9GnAT0?si=02ci2l44LteOhmRJ)) · [Pitch Deck](https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKecoqjW3u0ANYlD1Bd0hO7n2LiF4/edit?usp=sharing) · [Colosseum Submission](https://colosseum.com/arena/projects/15119/submission)
 
 ---
 
@@ -119,6 +119,8 @@ Colosseum Submission: https://colosseum.com/arena/projects/15119/submission
 Project Presentation: https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKecoqjW3u0ANYlD1Bd0hO7n2LiF4/edit?slide=id.p1#slide=id.p1
 
 Solana Devnet Explorer: https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet
+
+* [Video Demo](https://youtu.be/u8RML9GnAT0?si=voje9t_4Z2TTtQSp)
 
 ## License
 
