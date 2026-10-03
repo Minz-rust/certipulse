@@ -120,7 +120,7 @@ Project Presentation: https://docs.google.com/presentation/d/1Yghhdibiqeyj3jHKec
 
 Solana Devnet Explorer: https://explorer.solana.com/address/C4q98LErU614JFw48JEHsHwz3TVrJ2jBcx4CJeUxkyzn?cluster=devnet
 
-* [Video Demo](https://youtu.be/u8RML9GnAT0?si=voje9t_4Z2TTtQSp)
+Video Demo: https://youtu.be/u8RML9GnAT0?si=voje9t_4Z2TTtQSp
 
 ## License
 
