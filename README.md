@@ -18,6 +18,11 @@
 
 ---
 
+## Interface Preview
+
+![CertiPulse Preview](<img width="1917" height="1078" alt="image" src="https://github.com/user-attachments/assets/2eca3cae-2ac6-44b1-b626-0ca410fb839e" />)
+
+
 ## Problem and Solution
 
 ### 1. Widespread Credential Fraud
